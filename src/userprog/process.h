@@ -8,4 +8,9 @@ int process_wait (tid_t);
 void process_exit (void);
 void process_activate (void);
 
+struct pgm_args {
+	char **args;
+	int argCount;
+};
+
 #endif /* userprog/process.h */

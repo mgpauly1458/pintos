@@ -64,32 +64,38 @@ fi
 # Userprog commands (change when debugging other sys)
 
 if [ "$test_command" == "gdb" ]; then
-	cd $src_dir/userprog/build
-	pintos-gdb kernel.o
+        cd $src_dir/userprog/build
+        pintos-gdb kernel.o
 fi
 
 
 if [ "$test_command" == "args-none" ]; then
-	cd $src_dir/userprog/build
-	pintos -v -k -T 60 --qemu  --filesys-size=2 -p tests/userprog/args-none -a args-none -- -q  -f run args-none
+        cd $src_dir/userprog/build
+        pintos -v -k -T 60 --qemu  --filesys-size=2 -p tests/userprog/args-none -a args-none -- -q  -f run args-none
 fi
 
 
 if [ "$test_command" == "args-none-gdb" ]; then
-	cd $src_dir/userprog/build
-	pintos -v -k -T 60 --qemu  --filesys-size=2 -p tests/userprog/args-none -a args-none --gdb -- -q  -f run args-none
+        cd $src_dir/userprog/build
+        pintos -v -k -T 60 --qemu  --filesys-size=2 -p tests/userprog/args-none -a args-none --gdb -- -q  -f run args-none
 fi
 
 
 if [ "$test_command" == "test_write" ]; then
-	cd $src_dir/userprog/build
-	pintos -v -k -T 60 --qemu --filesys-size=2 -p ../../examples/test_write -a test_write -- -q -f run test_write
+        cd $src_dir/userprog/build
+        pintos -v -k -T 60 --qemu --filesys-size=2 -p ../../examples/test_write -a test_write -- -q -f run test_write
 fi
 
 
 if [ "$test_command" == "test_write-gdb" ]; then
-	cd $src_dir/userprog/build
-	pintos -v -k -T 60 --qemu --filesys-size=2 -p ../../examples/test_write -a test_write --gdb -- -q -f run test_write
+        cd $src_dir/userprog/build
+        pintos -v -k -T 60 --qemu --filesys-size=2 -p ../../examples/test_write -a test_write --gdb -- -q -f run test_write
 fi
+
+if [ "$test_command" == "echo" ]; then
+        cd $src_dir/userprog/build
+        pintos run 'echo x'
+fi
+
 
 exit 0

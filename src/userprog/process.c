@@ -21,13 +21,69 @@
 static thread_func start_process NO_RETURN;
 static bool load (const char *cmdline, void (**eip) (void), void **esp);
 
+struct pgm_args *breakIntoArgs(const char* input) {
+	struct pgm_args* container = (struct pgm_args*)malloc(sizeof(struct pgm_args));
+	container->argCount = 0;
+	container->args = (char**)malloc(sizeof(char*));
+	
+	// to ommit the single quote
+	size_t input_length = strlen(input);
+	char *input_copy = (char*)malloc(input_length);
+	strlcpy(input_copy, input, input_length);
+	char *saveptr;
+	char* token = strtok_r(input_copy, " ", &saveptr);
+	
+	while (token != NULL) {
+		container->args = (char**)realloc(container->args, (container->argCount + 1) * sizeof(char*));
+		size_t token_length = strlen(token) + 1;
+		container->args[container->argCount] = (char*)malloc(token_length);
+		strlcpy(container->args[container->argCount], token, token_length);
+		container->argCount++;
+		token = strtok_r(NULL, " ", &saveptr);
+	}
+	
+	free(input_copy);
+	return container;
+}
+
+void printArgs(struct pgm_args* container) {
+    if (container == NULL)
+        return;
+
+    printf("Total arg count: %d\n", container->argCount);
+
+    printf("Args:\n");
+    for (int i = 0; i < container->argCount; i++) {
+        printf("%s\n", container->args[i]);
+    }
+}
+
+void freeArgs(struct pgm_args* container) {
+    if (container == NULL)
+        return;
+
+    for (int i = 0; i < container->argCount; i++) {
+        free(container->args[i]);
+    }
+
+    free(container->args);
+    free(container);
+}
+
+
 /* Starts a new thread running a user program loaded from
    FILENAME.  The new thread may be scheduled (and may even exit)
    before process_execute() returns.  Returns the new process's
    thread id, or TID_ERROR if the thread cannot be created. */
 tid_t
-process_execute (const char *file_name) 
+process_execute (const char *args) 
 {
+  printf("process_execute called\n\n");
+  
+  struct pgm_args *pg_args = breakIntoArgs(args);
+  printArgs(pg_args);  
+  
+  char *file_name = pg_args->args[0];
   char *fn_copy;
   tid_t tid;
 

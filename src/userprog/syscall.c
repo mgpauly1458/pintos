@@ -8,6 +8,7 @@
 
 static void syscall_handler (struct intr_frame *);
 
+
 void
 syscall_init (void) 
 {
