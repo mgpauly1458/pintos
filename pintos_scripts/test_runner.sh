@@ -97,5 +97,9 @@ if [ "$test_command" == "echo" ]; then
         pintos run 'echo x'
 fi
 
+if [ "$test_command" == "test_arg" ]; then
+	cd $src_dir/userprog/build
+	pintos run 'test_arg 69'
+fi
 
 exit 0
