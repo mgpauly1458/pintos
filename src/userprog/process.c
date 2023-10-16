@@ -73,6 +73,10 @@ void freeArgs(struct pgm_args* container) {
 
 void add_args_to_stack(void** sp) {
 	printf("add_args called\n");
+	*(int *)(*sp - 4) = 0;
+	*(int*)(*sp - 8) = 69;
+	*(char**)(*sp - 12) = 0;
+	*sp = *sp - 12;	
 }
 
 /* Starts a new thread running a user program loaded from
@@ -494,7 +498,7 @@ setup_stack (void **esp)
     {
       success = install_page (((uint8_t *) PHYS_BASE) - PGSIZE, kpage, true);
       if (success)
-        *esp = PHYS_BASE - 12;
+        *esp = PHYS_BASE;
       else
         palloc_free_page (kpage);
     }
