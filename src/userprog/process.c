@@ -81,25 +81,28 @@ void add_int_to_stack(void **sp, int i) {
 	*sp = *sp - 4;
 }	
 
-void add_ptr_to_stack(void **sp, void *p) {
+void *add_ptr_to_stack(void **sp, void *p) {
 	*(void **)(*sp - 4) = p;
 	*sp = *sp - 4;
+	return *sp;
+}
+
+char *add_string_to_stack(void **sp, char *src, int size) {
+	printf("src=%s *sp=%p size=%d\n", src, *sp, size);	
+	memcpy(*sp - size, src, size);
+	*sp = *sp - size;
+	return (char*)*sp;
 }
 
 void add_args_to_stack(void** sp) {
 	printf("add_args called\n");
 	
 	char test_char[] = "test\0";
-	memcpy(*sp - 5, test_char, 5);
-	
-	char *argv_d1 = PHYS_BASE - 5;
-	*(char **)(*sp - 9) = argv_d1;
-	char **argv = PHYS_BASE - 9;
-	*(char ***)(*sp - 13) = argv;
-	*(int*)(*sp - 17) = 69;
-	*(void**)(*sp - 21) = 0;
-	*sp = *sp - 21;
-	
+	char *argv_d1 = add_string_to_stack(sp, test_char, strlen(test_char) + 1);
+	char **argv = (char**)add_ptr_to_stack(sp, argv_d1);	
+	add_ptr_to_stack(sp, argv);	
+	add_int_to_stack(sp, 69);
+	add_ptr_to_stack(sp, 0);	
 	printf("argv=%p *argv=%p argv[0]=%s\n", argv, *argv, argv[0]);
 
 }
