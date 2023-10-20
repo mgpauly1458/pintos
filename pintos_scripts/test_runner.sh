@@ -100,13 +100,23 @@ fi
 
 if [ "$test_command" == "test_arg" ]; then
 	cd $src_dir/userprog/build
-	pintos run 'test_arg 69'
+	pintos -q run 'test_arg 69'
 fi
 
 
 if [ "$test_command" == "test_arg-gdb" ]; then
 	cd $src_dir/userprog/build
 	pintos --gdb -- run 'test_arg 69'
+fi
+
+if [ "$test_command" == "put_test_arg" ]; then
+	cd $src_dir/userprog/build
+	pintos -p ../../examples/test_arg -a test_arg -- -q
+fi
+
+if [ "$test_command" == "del_test_arg" ]; then
+	cd $src_dir/userprog/build
+	pintos -q rm test_arg
 fi
 
 exit 0
